@@ -5,6 +5,23 @@ import pandas as pd
 data=pd.read_csv('D:/Rwork/COVID-TG/data-for-python.csv')
 data=data.drop('Unnamed: 0',axis=1)
 
+#Data visualization by PCA
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from mpl_toolkits.mplot3d import Axes3D
+x=data.iloc[:,1:7]
+y=data.iloc[:,0]
+pca1=PCA(n_components=3)
+pca1=pca1.fit(x)
+x1=pca1.transform(x)
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(x_dr[y==0,0],x_dr[y==0,1],x_dr[y==0,2],c='red',label='not severe')
+ax.scatter(x_dr[y==1,0],x_dr[y==1,1],x_dr[y==1,2],c='black',label='severe')
+ax.legend()
+ax.view_init(elev=10, azim=60)
+plt.show()
+
 #Build and train the model
 import tensorflow as tf
 import matplotlib.pyplot as mp
@@ -25,5 +42,13 @@ model2.compile(optimizer='adam',
 )
 model2.fit(xx1,yy1,epochs=200)
 
+#CrossValidation
+import numpy as np
+from sklearn.model_selection import KFold
+kf = KFold(n_splits=10)
+for train, test in kf.split(X):
+  print("%s %s" % (train, test))
+
 #produce the result 
 aa=model2.predict(test)
+
