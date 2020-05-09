@@ -1,0 +1,29 @@
+import numpy as np
+import pandas as pd
+
+#import data
+data=pd.read_csv('D:/Rwork/COVID-TG/data-for-python.csv')
+data=data.drop('Unnamed: 0',axis=1)
+
+#Build and train the model
+import tensorflow as tf
+import matplotlib.pyplot as mp
+train=data.iloc[0:111,]
+test=data.iloc[111:151,1:7]
+xx1=train.iloc[:,1:7]
+yy1=train.iloc[:,[0]]
+model2 = tf.keras.Sequential([tf.keras.layers.Dense(8,input_shape=(6,), activation=tf.nn.relu) , 
+                              tf.keras.layers.Dense(16, activation=tf.nn.relu),
+                              tf.keras.layers.Dense(16, activation=tf.nn.relu),
+                              tf.keras.layers.Dense(1, activation=tf.nn.sigmoid), 
+])
+model2.build(input_shape=(4, 6))
+optimizer = tf.keras.optimizers.RMSprop(0.001)
+model2.summary() 
+model2.compile(optimizer='adam',
+              loss='mse'
+)
+model2.fit(xx1,yy1,epochs=200)
+
+#produce the result 
+aa=model2.predict(test)
